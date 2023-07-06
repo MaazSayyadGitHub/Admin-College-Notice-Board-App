@@ -38,7 +38,7 @@ public class UploadNotice extends AppCompatActivity {
 
     private CardView addImage;  // for onclickListener
     private static final int REQ = 1;   // request code
-    private Bitmap bitmap;     // bitmap for image get
+    private Bitmap bitmap = null;     // bitmap for image get
     private ImageView noticeImageView;   // for set Image in image PreView
 
     String downloadUrl = "";
@@ -48,8 +48,8 @@ public class UploadNotice extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private DatabaseReference reference, DbRef;
-    private StorageReference storageReference;
+    private DatabaseReference reference, DbRef; // for real time database
+    private StorageReference storageReference; // for storage
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,7 @@ public class UploadNotice extends AppCompatActivity {
         noticeImageView = findViewById(R.id.noticeImageView);
         noticeTitle = findViewById(R.id.noticeTitle);
         uploadNoticeBtn = findViewById(R.id.uploadNoticeButton);
+
         progressDialog = new ProgressDialog(this);
 
         reference = FirebaseDatabase.getInstance().getReference();
@@ -81,9 +82,9 @@ public class UploadNotice extends AppCompatActivity {
 
                 } else if (bitmap == null){
                     Toast.makeText(UploadNotice.this, "You Not Selected Image", Toast.LENGTH_SHORT).show();
-                    uploadData();
+                    uploadData(); // data will be added to database
                 } else {
-
+                    // both data and image will be store in database
                     uploadImage();
                 }
 
@@ -102,7 +103,8 @@ public class UploadNotice extends AppCompatActivity {
 
         final StorageReference filePath;
         filePath = storageReference.child("Notice").child(finalImage+"jpg"); // store img in firebase file path.
-        final UploadTask uploadTask = filePath.putBytes(finalImage);   // for upload img .
+
+        final UploadTask uploadTask = filePath.putBytes(finalImage);   // for upload img.
 
         uploadTask.addOnCompleteListener(UploadNotice.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {    // after complete.
             @Override
@@ -112,10 +114,11 @@ public class UploadNotice extends AppCompatActivity {
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // get the image path and download image through Uri and get it in downloadUrl.
                             filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {  // after success , uri will be download.
-
+                                    // get in downloadUrl
                                     downloadUrl = String.valueOf(uri);
                                     uploadData();
 
@@ -146,9 +149,10 @@ public class UploadNotice extends AppCompatActivity {
 
         // this is for Time.
         Calendar calendarTime = Calendar.getInstance();
-        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a"); // a = for AM/PM
         String time = currentTime.format(calendarTime.getTime());
 
+        // pass data to model class
         NoticeData noticeData = new NoticeData(title, downloadUrl, date, time, uniqueKey);
 
         DbRef.child(uniqueKey).setValue(noticeData).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -168,25 +172,27 @@ public class UploadNotice extends AppCompatActivity {
     }
 
 
-
-
     private void openGallery(){
         Intent pickImage = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickImage, REQ);
     }
 
+    // startActivityForResult,
+    // we use these two methods for going to another activity or another apps to get data from there and use in this activity.
+    // here we are getting image from gallery.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQ && resultCode == RESULT_OK){
-            Uri uri = data.getData();  // it will get image from gallery
+        if (requestCode == REQ && resultCode == RESULT_OK) {
+            // each data comes in data.
+            Uri uri = data.getData();  // it will get image uri from gallery
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri); // and convert in bitmap
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            noticeImageView.setImageBitmap(bitmap);  // and set in noticeImageView..
+            noticeImageView.setImageBitmap(bitmap);  // and set in noticeImageView.. Preview
 
         }
     }

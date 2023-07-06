@@ -40,13 +40,13 @@ public class UpdateTeacherActivity extends AppCompatActivity {
 
     private String name, email, image, post;
     private final static int REQ = 1;
-    private Bitmap bitmap = null;
+    private Bitmap bitmap = null; // null becos we are checking null condition for validate
     private String downloadUrl = "";
 
     private StorageReference storageReference;
     private DatabaseReference reference;
 
-    private String category , uniqueKey;
+    private String category, uniqueKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class UpdateTeacherActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference().child("Teacher");
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        // get data from activity
+        // get data from adapter for update
         name = getIntent().getStringExtra("name");
         email = getIntent().getStringExtra("email");
         post = getIntent().getStringExtra("post");
@@ -85,7 +85,7 @@ public class UpdateTeacherActivity extends AppCompatActivity {
         updateTeacherImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();  // image Picker
+                openGallery();  // Open Image Picker
             }
         });
 
@@ -96,6 +96,7 @@ public class UpdateTeacherActivity extends AppCompatActivity {
                 email = updateTeacheremail.getText().toString();
                 post = updateTeacherpost.getText().toString();
 
+                // check if any field is empty
                 checkValidation();
             }
         });
@@ -118,19 +119,24 @@ public class UpdateTeacherActivity extends AppCompatActivity {
         } else if (post.isEmpty()){
             updateTeacherpost.setError("Field is Empty");
             updateTeacherpost.requestFocus();
-        } else if (bitmap == null){
-            updateData(image);  // image is pass due to current image of Teacher.
+        } else if (bitmap == null) {
+            // if admin not select new image from (Image Picker) means bitmap is null
+            // then it will upload previous image
+            updateData(image); // this is pre image
         } else {
+            // if select then new means bitmap will be upload
             uploadImage();
         }
     }
 
-    private void updateData(String s){
+    private void updateData(String Image){ // here both images will be come, previous image also and new bitmap also.
+
+        // put all data into hashmap and pass to upload in database
         HashMap hp = new HashMap();
         hp.put("name", name);
         hp.put("email", email);
         hp.put("post", post);
-        hp.put("image", s);
+        hp.put("image", Image);
 
 
         reference.child(category).child(uniqueKey).updateChildren(hp).addOnSuccessListener(new OnSuccessListener() {
@@ -138,7 +144,9 @@ public class UpdateTeacherActivity extends AppCompatActivity {
             public void onSuccess(Object o) {
                 Toast.makeText(UpdateTeacherActivity.this, "Teacher Updated Successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(UpdateTeacherActivity.this, UpdateFaculty.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);  // for come back from Activity
+                // if i will press back after coming back from Update Activity then it will not go to Update Activity Again.
+                // proven by testing - that's why we use flags to clear all Activities and put current activity on top.
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -150,6 +158,7 @@ public class UpdateTeacherActivity extends AppCompatActivity {
     }
 
     private void deleteData(){
+        // we will simply remove value of that particular uniqueKey. so it is our deletion
         reference.child(category).child(uniqueKey).removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -167,8 +176,10 @@ public class UpdateTeacherActivity extends AppCompatActivity {
         });
     }
 
+    // upload new image to storage and get url from here to upload in database
     private void uploadImage(){
 
+        // compress image
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); // compress image..
         byte[] finalImage = baos.toByteArray();
@@ -223,7 +234,7 @@ public class UpdateTeacherActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            updateTeacherImg.setImageBitmap(bitmap);  // and set in ImageView..
+            updateTeacherImg.setImageBitmap(bitmap);  // and set in ImageView.. icon
 
         }
     }

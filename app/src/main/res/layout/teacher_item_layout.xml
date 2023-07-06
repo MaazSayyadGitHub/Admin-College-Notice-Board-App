@@ -70,9 +70,11 @@
                 android:layout_height="120dp"
                 android:src="@drawable/man"
                 android:layout_weight="0.5"
+                android:padding="10dp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
+
     </LinearLayout>
 
 

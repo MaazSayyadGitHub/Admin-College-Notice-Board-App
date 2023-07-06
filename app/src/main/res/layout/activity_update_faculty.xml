@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/csNoData">
-
+                <!-- including new layout file -->
                 <include layout="@layout/no_data_found"/>
 
             </LinearLayout>
@@ -166,6 +166,7 @@
 
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="3dp"
+    app:cardCornerRadius="3dp"
+    android:layout_margin="3dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,18 +40,29 @@
                 android:layout_height="wrap_content"
                 android:text="Delete"
                 android:layout_marginLeft="-100dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                />
 
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/deleteNoticeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="GGFSHGfhgs jhsgfh uiau siau agdag kajdhskah kjhsdakjs ashdj jhsd dd jsddd."
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="GGFSHGfhgs jhsgfh uiau siau ksdshdkshd kdjksdksdhsd adsjalkdj agdag kajdhskah kjhsdakjs ashdj jhsd dd jsddd."
             android:textSize="17sp"
             android:textColor="@color/textColor"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/lightGray"
+            />
 
         <ImageView
             android:id="@+id/deleteNoticeImage"

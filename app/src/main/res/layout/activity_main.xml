@@ -4,58 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/lightGray"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_margin="5dp"
-        >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addNotice"
             android:layout_width="130dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:id="@+id/addNotice"
             android:elevation="5dp"
-            >
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/circle_green"
-                    android:src="@drawable/ic_notice"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/ic_notice" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
                     android:layout_marginTop="10dp"
-                    />
+                    android:background="@color/lightGray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload Notice"
-                    android:textStyle="bold"
-                    android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="UPLOAD NOTICE"
                     android:textColor="@color/textColor"
-                    />
-
-
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -63,43 +59,40 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addGalleryImage"
             android:layout_width="130dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:id="@+id/addGalleryImage"
             android:elevation="5dp"
-            >
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/circle_purple"
-                    android:src="@drawable/ic_gallery"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/ic_gallery" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
                     android:layout_marginTop="10dp"
-                    />
+                    android:background="@color/lightGray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload Image"
-                    android:textStyle="bold"
-                    android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="UPLOAD IMAGE"
                     android:textColor="@color/textColor"
-                    />
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -111,51 +104,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_margin="5dp"
-        >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addEBook"
             android:layout_width="130dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:id="@+id/addEBook"
             android:elevation="5dp"
-            >
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/circle_pink"
-                    android:src="@drawable/ic_upload"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/ic_upload" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
                     android:layout_marginTop="10dp"
-                    />
+                    android:background="@color/lightGray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload EBook"
-                    android:textStyle="bold"
-                    android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="UPLOAD E-BOOK"
                     android:textColor="@color/textColor"
-                    />
-
-
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -163,43 +150,40 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addFaculty"
             android:layout_width="130dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:id="@+id/addFaculty"
             android:elevation="5dp"
-            >
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/circle_yellow"
-                    android:src="@drawable/ic_group"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/ic_group" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
                     android:layout_marginTop="10dp"
-                    />
+                    android:background="@color/lightGray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Update Faculty"
-                    android:textStyle="bold"
-                    android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="UPDATE FACULTY"
                     android:textColor="@color/textColor"
-                    />
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -211,51 +195,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_margin="5dp"
-        >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/deleteNotice"
             android:layout_width="130dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:id="@+id/deleteNotice"
             android:elevation="5dp"
-            >
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/circle_red"
-                    android:src="@drawable/ic_delete"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:src="@drawable/ic_delete" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/lightGray"
                     android:layout_marginTop="10dp"
-                    />
+                    android:background="@color/lightGray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete Notice"
-                    android:textStyle="bold"
-                    android:padding="5dp"
                     android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:text="DELETE NOTICE"
                     android:textColor="@color/textColor"
-                    />
-
-
+                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -264,8 +242,6 @@
 
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

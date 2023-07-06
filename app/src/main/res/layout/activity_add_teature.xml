@@ -72,16 +72,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/addTeacherCategory"
-            android:spinnerMode="dropdown"
+            android:spinnerMode="dialog"
             android:background="@android:drawable/btn_dropdown"
             android:gravity="center"
             android:layout_marginVertical="16dp"
+            android:backgroundTint="#ECCB7E"
             />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Teacher"
+            android:text="ADD TEACHER"
             android:layout_marginTop="16dp"
             android:textAllCaps="false"
             android:id="@+id/addTeacherBtn"/>

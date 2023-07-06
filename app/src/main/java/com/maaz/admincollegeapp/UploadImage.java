@@ -39,12 +39,13 @@ public class UploadImage extends AppCompatActivity {
     private CardView selectImage;
     private Button uploadImage;
     private ImageView GalleryImageView;
+
     ProgressDialog progressDialog;
 
     private String category;
 
     private final int REQ = 1;
-    private Bitmap bitmap;
+    private Bitmap bitmap = null;
     private String downloadUrl;
 
     private DatabaseReference reference;
@@ -59,13 +60,18 @@ public class UploadImage extends AppCompatActivity {
         imageCategory = findViewById(R.id.image_category);
         uploadImage = findViewById(R.id.uploadImageButton);
         GalleryImageView = findViewById(R.id.galleryImageView);
+
         progressDialog = new ProgressDialog(this);
 
-        reference = FirebaseDatabase.getInstance().getReference().child("gallery");
-        storageReference = FirebaseStorage.getInstance().getReference().child("gallery");
+        reference = FirebaseDatabase.getInstance().getReference().child("gallery"); // in database
+        storageReference = FirebaseStorage.getInstance().getReference().child("gallery"); // in storage
 
+        // for spinner
         String[] items = new String[]{"Select Category", "Convocation", "Independence Day", "Other Events"};  // spinner category array.
-        imageCategory.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items)); // set on spinner
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        imageCategory.setAdapter(arrayAdapter);
+
+        // imageCategory.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items)); // set on spinner
 
         imageCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {   // selected category
             @Override
@@ -75,7 +81,6 @@ public class UploadImage extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
                 Toast.makeText(UploadImage.this, "Nothing Selected", Toast.LENGTH_SHORT).show();
             }
         });
@@ -87,19 +92,20 @@ public class UploadImage extends AppCompatActivity {
             }
         });
 
+        // check validation
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bitmap == null){   // if image is not selected
+                if (bitmap == null) {   // if image is not selected
                     Toast.makeText(UploadImage.this, "Please Select Image", Toast.LENGTH_SHORT).show();
-                } else if (category.equals("Select Category")){         // if spinner is not selected
+                } else if (category.equals("Select Category")) {         // if spinner is not selected
                     Toast.makeText(UploadImage.this, "Please Select Image Category", Toast.LENGTH_SHORT).show();
                 } else {
                     // upload image & category
                     progressDialog.setMessage("Uploading...");
                     progressDialog.show();
 
-                    uploadImagetoFirebase();
+                    uploadImageToFirebase();
                 }
 
             }
@@ -107,24 +113,27 @@ public class UploadImage extends AppCompatActivity {
 
     }
 
-    private void uploadImagetoFirebase(){
+    private void uploadImageToFirebase() {
 
+        // to Compress Image
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos); // compress image..
         byte[] finalImage = baos.toByteArray();
 
+
         final StorageReference filePath;
-        filePath = storageReference.child(finalImage+"jpg"); // store img in firebase file path.
+        filePath = storageReference.child(finalImage + "jpg"); // store img in firebase file path.
         final UploadTask uploadTask = filePath.putBytes(finalImage);   // for upload img .
 
         uploadTask.addOnCompleteListener(UploadImage.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {    // after complete.
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-                if (task.isSuccessful()){     // upload after task complete..
+                if (task.isSuccessful()) {     // upload after task complete..
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // download image url from uri
                             filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {  // after success , uri will be download.
@@ -137,8 +146,7 @@ public class UploadImage extends AppCompatActivity {
                         }
                     });
 
-                }
-                else {
+                } else {
                     progressDialog.dismiss();
                     Toast.makeText(UploadImage.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
                 }
@@ -146,10 +154,10 @@ public class UploadImage extends AppCompatActivity {
         });
     }
 
-    private void uploadData(){
+    private void uploadData() {
 
         reference = reference.child(category);
-        final String uniqueKey = reference.push().getKey();
+        final String uniqueKey = reference.push().getKey(); // get unique to identify
 
         reference.child(uniqueKey).setValue(downloadUrl).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -166,8 +174,7 @@ public class UploadImage extends AppCompatActivity {
         });
     }
 
-
-    private void openGallery(){  // image picker from gallery
+    private void openGallery() {  // image picker from gallery
         Intent pickImage = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickImage, REQ);
     }
@@ -176,14 +183,14 @@ public class UploadImage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQ && resultCode == RESULT_OK){
+        if (requestCode == REQ && resultCode == RESULT_OK) {
             Uri uri = data.getData();  // it will get image from gallery
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri); // and convert in bitmap
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            GalleryImageView.setImageBitmap(bitmap);  // and set in noticeImageView..
+            GalleryImageView.setImageBitmap(bitmap);  // and set in noticeImageView.. Preview
 
         }
     }

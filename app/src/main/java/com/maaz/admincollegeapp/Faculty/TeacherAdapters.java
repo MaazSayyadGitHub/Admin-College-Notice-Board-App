@@ -34,7 +34,6 @@ public class TeacherAdapters extends RecyclerView.Adapter<TeacherAdapters.Teache
     @NonNull
     @Override
     public TeacherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(context).inflate(R.layout.teacher_item_layout, parent, false);
         return new TeacherViewHolder(view);
     }
@@ -43,11 +42,13 @@ public class TeacherAdapters extends RecyclerView.Adapter<TeacherAdapters.Teache
     public void onBindViewHolder(@NonNull TeacherViewHolder holder, int position) {
 
         TeacherData item = list.get(position);
+
         holder.name.setText(item.getName());
         holder.email.setText(item.getEmail());
         holder.post.setText(item.getPost());
 
         try {
+            // try catch becos if there is no image, we will not see nullPointerException.
             Picasso.get().load(item.getImage()).into(holder.imageView);
         }catch (Exception e){
             e.printStackTrace();
@@ -62,7 +63,7 @@ public class TeacherAdapters extends RecyclerView.Adapter<TeacherAdapters.Teache
                 intent.putExtra("post", item.getPost());
                 intent.putExtra("image", item.getImage());
                 intent.putExtra("key", item.getKey());
-                intent.putExtra("category", category);
+                intent.putExtra("category", category); // which will be get from activity
 
                 context.startActivity(intent);
             }
@@ -84,6 +85,7 @@ public class TeacherAdapters extends RecyclerView.Adapter<TeacherAdapters.Teache
 
         public TeacherViewHolder(@NonNull View itemView) {
             super(itemView);
+
             name = itemView.findViewById(R.id.teacherName);
             email = itemView.findViewById(R.id.teacherEmail);
             post = itemView.findViewById(R.id.teacherPost);

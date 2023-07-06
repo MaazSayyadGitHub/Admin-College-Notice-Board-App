@@ -77,8 +77,9 @@ public class AddTeature extends AppCompatActivity {
             }
         });
 
-        String[] items = new String[]{"Select Category", "Computer Science", "Mechanical", "Physics", "Chemistry"};  // spinner category array.
-        addTeacherCategory.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items)); // set on spinner
+        // Spinner Work here
+        String[] items = new String[]{"Select Department", "Computer Science", "Mechanical", "Physics", "Chemistry"};  // spinner category array.
+        addTeacherCategory.setAdapter(new ArrayAdapter<>(this, android.R.layout.select_dialog_multichoice, items)); // set on spinner
 
         addTeacherCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {   // selected category
             @Override
@@ -88,12 +89,11 @@ public class AddTeature extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
                 Toast.makeText(AddTeature.this, "Nothing Selected", Toast.LENGTH_SHORT).show();
             }
         });
 
-
+        // get image from gallery
         addTeacherImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +119,7 @@ public class AddTeature extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            addTeacherImg.setImageBitmap(bitmap);  // and set in ImageView..
+            addTeacherImg.setImageBitmap(bitmap);  // and set in ImageView.. icon
 
         }
     }
@@ -138,23 +138,22 @@ public class AddTeature extends AppCompatActivity {
         } else if (post.isEmpty()){
             addTeacherPost.setError("Empty");
             addTeacherPost.requestFocus();
-        } else if (category.equals("Select Category")){
-            Toast.makeText(this, "Please Select Category", Toast.LENGTH_SHORT).show();
+        } else if (category.equals("Select Department")){
+            Toast.makeText(this, "Please Select Department", Toast.LENGTH_SHORT).show();
         } else if (bitmap == null){
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
-            InsertData();
+            InsertData(); // here only data will be add not image
         } else{
             progressDialog.setMessage("Uploading...");
             progressDialog.show();
-            uploadImage();
+            uploadImage(); // here both image and data also added, becos in this method data also adding.
         }
     }
 
     private void InsertData(){
         DbRef = reference.child(category);
         final String uniqueKey = DbRef.push().getKey();
-
 
         TeacherData teacherData = new TeacherData(name, email, post, downloadUrl, uniqueKey);
 
@@ -191,6 +190,7 @@ public class AddTeature extends AppCompatActivity {
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // get uri from storage file path.
                             filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {  // after success , uri will be download.

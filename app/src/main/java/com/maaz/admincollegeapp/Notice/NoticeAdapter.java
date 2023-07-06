@@ -1,6 +1,8 @@
 package com.maaz.admincollegeapp.Notice;
 
 import androidx.appcompat.app.AlertDialog;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -44,37 +46,40 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NoticeViewAdapter holder, int position) {
+    public void onBindViewHolder(@NonNull NoticeViewAdapter holder, @SuppressLint("RecyclerView") int position) {
 
         NoticeData item = list.get(position);
+
+        // setting all data to delete notice Activity
         holder.deleteNoticeTitle.setText(item.getTitle());
 
         try {
+            // if image is available then it will show
             if (item.getImage() != null)
             Picasso.get().load(item.getImage()).into(holder.deleteNoticeImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // click delete button to show alert dialog
         holder.deleteNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
                 builder.setMessage("Are you Want to Delete this Notice?");
-                builder.setCancelable(true);
-                builder.setPositiveButton(
-                        "OK",
-                        new DialogInterface.OnClickListener() {
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // delete operation...
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Notice");
-                                reference.child(item.getKey()).removeValue()  // if Notice child and key child is matched then Delete.
+                                reference.child(item.getKey()).removeValue()  // it will directly removing value of that particular key.
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(context, "Data Deleted", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, "Notice Deleted", Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -82,26 +87,29 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeView
                                         Toast.makeText(context, "Something went Wrong.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                                // change the layout of recyclerView after deleting for that position
                                 notifyItemRemoved(position);
                             }
                         }
                 );
-                builder.setNegativeButton(
-                        "Cancel",
-                        new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                             }
                         }
                 );
+
+                // this code for showing AlertDialog
                 AlertDialog dialog = null;
+
                 try {
-                    dialog = builder.create();
+                    dialog = builder.create(); // we will create builder and put in dialog so it will not be null.
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+                // if its not null then it will shown to user
                 if (dialog != null){
                     dialog.show();
                 }
@@ -117,9 +125,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeView
 
     public class NoticeViewAdapter extends RecyclerView.ViewHolder {
 
-        private Button deleteNotice;
-        private TextView deleteNoticeTitle;
-        private ImageView deleteNoticeImage;
+        private final Button deleteNotice;
+        private final TextView deleteNoticeTitle;
+        private final ImageView deleteNoticeImage;
+
         public NoticeViewAdapter(@NonNull View itemView) {
             super(itemView);
 

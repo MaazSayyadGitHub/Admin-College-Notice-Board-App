@@ -4,6 +4,7 @@ public class NoticeData {
 
     String title, image, date, time, key;
 
+    // empty constructor is need for firebase
     public NoticeData() {
     }
 

@@ -49,10 +49,12 @@ public class DeleteNoticeActivity extends AppCompatActivity {
 
 
     private void getNotice() {
+        // get all uploaded notices
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list = new ArrayList<>();
+
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     NoticeData data = snapshot1.getValue(NoticeData.class);
                     list.add(data);

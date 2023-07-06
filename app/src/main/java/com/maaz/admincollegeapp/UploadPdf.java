@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,7 +39,6 @@ public class UploadPdf extends AppCompatActivity {
 
     private CardView addPdf;  // for onclickListener
     private static final int REQ = 1;   // request code
-    private Bitmap bitmap;     // bitmap for image get
 
     private EditText pdfTitle;
     private Button uploadPdfBtn;
@@ -69,7 +69,7 @@ public class UploadPdf extends AppCompatActivity {
         addPdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+                openGallery(); // open File storage to get PDF
             }
         });
 
@@ -77,49 +77,54 @@ public class UploadPdf extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 title = pdfTitle.getText().toString();
-                if (title.isEmpty()){
+                if (title.isEmpty()) {
                     pdfTitle.setError("Empty");
                     pdfTitle.requestFocus();
-                } else if (pdfData == null){
+                } else if (pdfData == null) { // if pdf uri is not then
                     Toast.makeText(UploadPdf.this, "Select Pdf", Toast.LENGTH_SHORT).show();
                 } else {
+
                     uploadPDF();
                 }
             }
         });
     }
 
-    private void uploadPDF(){
+    private void uploadPDF() {
         progressDialog.setTitle("Please Wait..");
         progressDialog.setMessage("Uploading pdf");
         progressDialog.show();
 
-        StorageReference reference = storageReference.child("pdf/"+pdfName+"-"+System.currentTimeMillis()+".pdf");
+        StorageReference reference = storageReference.child("pdf/" + pdfName + "-" + System.currentTimeMillis() + ".pdf");
+        // add file to that child
         reference.putFile(pdfData)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uriTask =taskSnapshot.getStorage().getDownloadUrl();
-                        while (!uriTask.isComplete());
+                        // get url to store in database.
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+
+                        while (!uriTask.isComplete()); // while uriTask not complete run loop
 
                         Uri uri = uriTask.getResult();
                         uploadData(String.valueOf(uri));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(UploadPdf.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(UploadPdf.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void uploadData(String downloadUrl) {
         String uniqueKey = databaseReference.child("pdf").push().getKey();
 
+        // hashmap for multiple value.
         HashMap data = new HashMap();
-        data.put("pdfTitle" , title);
-        data.put("pdfUrl" , downloadUrl);
+        data.put("pdfTitle", title);
+        data.put("pdfUrl", downloadUrl);
 
         databaseReference.child("pdf").child(uniqueKey).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -137,39 +142,42 @@ public class UploadPdf extends AppCompatActivity {
         });
     }
 
-
-
-    private void openGallery(){
+    private void openGallery() {
         Intent intent = new Intent();
         intent.setType("pdf/docs/ppt");  // if not work then write * for all type.
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select Pdf File"), REQ);
+        startActivityForResult(Intent.createChooser(intent, "Select Pdf File"), REQ);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQ && resultCode == RESULT_OK){
-
+        if (requestCode == REQ && resultCode == RESULT_OK) {
             pdfData = data.getData();   // pdf is got
 
-           if (pdfData.toString().startsWith("content://")){   // for showing which pdf (name) is selected..
-               Cursor cursor = null;
-               try {
-                   cursor = UploadPdf.this.getContentResolver().query(pdfData, null, null, null, null);
-                   if (cursor != null && cursor.moveToFirst()){
-                       pdfName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));  // here is Name of Pdf file.
-                   }
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
+            // to get pdf name - if its starts with "content://" then we need to move cursor,
+            // either if its starts with "file://" then it will give us name directly.
+            if (pdfData.toString().startsWith("content://")) {   // for showing which pdf (name) is selected..
+                Cursor cursor;
+                try {
+                    cursor = UploadPdf.this.getContentResolver().query(pdfData, null, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        pdfName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));  // here is Name of Pdf file.
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (pdfData.toString().startsWith("file://")) {
+                // if its starts from file:// then it is simple.
+                // here it will give us name from File object.
+                pdfName = new File(pdfData.toString()).getName();
 
-           } else if (pdfData.toString().startsWith("file://")){
-               pdfName = new File(pdfData.toString()).getName();
+            }
 
-           }
-           pdfTextView.setText(pdfName);   // show pdf name in textView.
+            pdfTextView.setText(pdfName);   // show pdf name in textView.
+            pdfTextView.setTextColor(R.color.black); // set color black after select.
 
         }
     }

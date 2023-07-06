@@ -53,27 +53,29 @@ public class UpdateFaculty extends AppCompatActivity {
 
         reference = FirebaseDatabase.getInstance().getReference().child("Teacher");
 
+        // call individually
         csDepartment();
         mechanicalDepartment();
         physicsDepartment();
         chemistryDepartment();
 
-
+        // to go Add Teacher Activity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(UpdateFaculty.this, AddTeature.class));
-
             }
         });
     }
 
     private void csDepartment() {
         DbRef = reference.child("Computer Science");
+        // to get data from realtime database
         DbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list1 = new ArrayList<>();
+
                 if (!snapshot.exists()){    // if data is not exists here then visibility csNoData will display
                     csNoData.setVisibility(View.VISIBLE);
                     csDepartment.setVisibility(View.GONE);   // and csDepartment will not display
@@ -81,13 +83,14 @@ public class UpdateFaculty extends AppCompatActivity {
                     csNoData.setVisibility(View.GONE);         // if data exists then csDepartment will display
                     csDepartment.setVisibility(View.VISIBLE);   // and csNoData Visibility Gone.
                     for (DataSnapshot snapshot1: snapshot.getChildren()){
-                        TeacherData data = snapshot1.getValue(TeacherData.class);
-                        list1.add(data);
+                        TeacherData data = snapshot1.getValue(TeacherData.class); // convert all data to TeacherData object
+                        list1.add(data); // add all data to list1.
                     }
-                    csDepartment.setHasFixedSize(true);     // adapter set
+                    csDepartment.setHasFixedSize(true);     // for recyclerView size fixed.
                     csDepartment.setLayoutManager(new LinearLayoutManager(UpdateFaculty.this));
-                    adapters = new TeacherAdapters(list1, UpdateFaculty.this, "Computer Science");  // this extra category for access
-                    csDepartment.setAdapter(adapters);                                                      // category in update teacher data.
+                    // category to pass update Activity
+                    adapters = new TeacherAdapters(list1, UpdateFaculty.this, "Computer Science");
+                    csDepartment.setAdapter(adapters);
                 }
             }
 
@@ -100,10 +103,12 @@ public class UpdateFaculty extends AppCompatActivity {
 
     private void mechanicalDepartment() {
         DbRef = reference.child("Mechanical");
+        // to get data from realtime database
         DbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list2 = new ArrayList<>();
+
                 if (!snapshot.exists()){    // if data is not exists here then visibility csNoData will display
                     mechanicalNoData.setVisibility(View.VISIBLE);
                     mechanicalDepartment.setVisibility(View.GONE);   // and csDepartment will not display
@@ -114,7 +119,7 @@ public class UpdateFaculty extends AppCompatActivity {
                         TeacherData data = snapshot1.getValue(TeacherData.class);
                         list2.add(data);
                     }
-                    mechanicalDepartment.setHasFixedSize(true);     // adapter set
+                    mechanicalDepartment.setHasFixedSize(true);     // for fixed recyclerview Size
                     mechanicalDepartment.setLayoutManager(new LinearLayoutManager(UpdateFaculty.this));
                     adapters = new TeacherAdapters(list2, UpdateFaculty.this, "Mechanical");
                     mechanicalDepartment.setAdapter(adapters);
@@ -130,6 +135,7 @@ public class UpdateFaculty extends AppCompatActivity {
 
     private void physicsDepartment() {
         DbRef = reference.child("Physics");
+        // to get data from realtime database
         DbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -144,7 +150,7 @@ public class UpdateFaculty extends AppCompatActivity {
                         TeacherData data = snapshot1.getValue(TeacherData.class);
                         list3.add(data);
                     }
-                    physicsDepartment.setHasFixedSize(true);     // adapter set
+                    physicsDepartment.setHasFixedSize(true);     // fixed size of Recyclerview
                     physicsDepartment.setLayoutManager(new LinearLayoutManager(UpdateFaculty.this));
                     adapters = new TeacherAdapters(list3, UpdateFaculty.this, "Physics");
                     physicsDepartment.setAdapter(adapters);
@@ -160,6 +166,8 @@ public class UpdateFaculty extends AppCompatActivity {
 
     private void chemistryDepartment() {
         DbRef = reference.child("Chemistry");
+
+        // to get data from realtime database
         DbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -174,7 +182,7 @@ public class UpdateFaculty extends AppCompatActivity {
                         TeacherData data = snapshot1.getValue(TeacherData.class);
                         list4.add(data);
                     }
-                    chemistryDepartment.setHasFixedSize(true);     // adapter set
+                    chemistryDepartment.setHasFixedSize(true);     // for fixing size of recyclerview
                     chemistryDepartment.setLayoutManager(new LinearLayoutManager(UpdateFaculty.this));
                     adapters = new TeacherAdapters(list4, UpdateFaculty.this, "Chemistry");
                     chemistryDepartment.setAdapter(adapters);
