@@ -1,5 +1,5 @@
 # Admin College (Notice) Board App
-### (This App is made For College Students And Admins To Handle Notices & To Be Update And Be Connected To Each Other Outside College As Well) 
+(This App is made For College Students And Admins To Handle Notices & To Be Update And Be Connected To Each Other Outside College As Well) 
 
 
 ### About App:-
