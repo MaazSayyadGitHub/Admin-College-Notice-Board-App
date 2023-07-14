@@ -11,42 +11,49 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AdminCollegeApp"
-        >
-        <activity android:name=".Notice.DeleteNoticeActivity"
-            android:label="Delete Notices"
-            />
-        <activity android:name=".Faculty.UpdateTeacherActivity"
-            android:label="Update Teacher"
-            />
-        <activity android:name=".Faculty.AddTeature"
-            android:label="Add Techer"
-            />
-        <activity android:name=".Faculty.UpdateFaculty"
-            android:label="Update Faculty"
-            />
-        <activity android:name=".UploadPdf"
-            android:label="Upload Pdf"
-            />
-        <activity android:name=".UploadImage"
-            android:label="Upload Image"
-            />
-        <activity android:name=".Notice.UploadNotice"
-            android:label="Upload Notice"
-            />
-        <activity android:name=".MainActivity"
-            android:label="Admin Home">
+        android:theme="@style/Theme.AdminCollegeApp">
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Notice.DeleteNoticeActivity"
+            android:label="Delete Notices" />
+        <activity
+            android:name=".Faculty.UpdateTeacherActivity"
+            android:label="Update Teacher" />
+        <activity
+            android:name=".Faculty.AddTeature"
+            android:label="Add Techer" />
+        <activity
+            android:name=".Faculty.UpdateFaculty"
+            android:label="Update Faculty" />
+        <activity
+            android:name=".UploadPdf"
+            android:label="Upload Pdf" />
+        <activity
+            android:name=".UploadImage"
+            android:label="Upload Image" />
+        <activity
+            android:name=".Notice.UploadNotice"
+            android:label="Upload Notice" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Admin Home">
         </activity>
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts"
-            />
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
