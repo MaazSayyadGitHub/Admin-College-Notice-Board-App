@@ -2,6 +2,7 @@
 (This App is made For College Students And Admins To Handle Notices & To Be Update And Be Connected To Each Other Outside College As Well) 
 
 
+
 ### About App:-
 #### In This Admin App Admin can set Notices About Whatever was on College Board, regarding Faculties Or College. 
 #### and Admin can also set their Faculty, can set Ebooks/PDFs, can set Festive Photos into Galleries.
@@ -10,6 +11,11 @@
 #### This App is made with ( JAVA, Firebase Realtime Database, Xml, Material Design )
 
 ## SCREENSHOTS
+
+### LOG IN 
+<div>
+  <img src="https://github.com/MaazSayyadGitHub/Admin-College-Notice-Board-App/assets/116147402/809c0237-88b8-4b9a-a32f-33f5209f6051.png" alt="dashboard" height="500dp">
+</div>
 
 ### Home & Notice (ADD NOTICES)
 <div>
@@ -31,7 +37,6 @@
 <img src="https://github.com/MaazSayyadGitHub/Admin-College-Notice-Board-App/assets/116147402/34d66f93-833c-41d9-b3a2-8faed664e753.png" alt="dashboard" height="500dp">
 
 <img src="https://github.com/MaazSayyadGitHub/Admin-College-Notice-Board-App/assets/116147402/8d73c31c-9a30-40a0-9087-edf971e4fc70.png" alt="dashboard" height="500dp">
-
 </div>
 
 ### PDFs - (ADD PDF/DOCS/TEXTs)
